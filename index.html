@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Preguntas y Respuestas</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #question-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 1.5em;
+            padding: 20px;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            width: 50%;
+            margin: 20px auto;
+        }
+        .option-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 50%;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+        .option {
+            width: calc(50% - 10px);
+            padding: 20px;
+            margin: 5px;
+            background-color: #fff;
+            border: 2px solid #a0d1fb;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, font-size 0.3s, color 0.3s;
+            font-size: 1em;
+            color: #333;
+            font-weight: bold;
+        }
+        .option:hover {
+            background-color: #f0f8ff;
+        }
+        .selected.correct {
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 2em;
+        }
+        .selected.incorrect {
+            background-color: #f44336;
+            color: #fff;
+        }
+        .question-numbers {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .question-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: #333;
+            transition: background-color 0.3s, border 0.3s;
+        }
+        .question-number:hover {
+            background-color: #f0f8ff;
+            border-color: #999;
+        }
+        .correct {
+            background-color: #4caf50 !important;
+            color: #fff !important;
+        }
+        .incorrect {
+            background-color: #f44336 !important;
+            color: #fff !important;
+        }
+        #score-container {
+            margin-top: 20px;
+            font-size: 4em;
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reto de Riesgo , Vida y salud</h1>
+    <div id="question-container">
+        <div id="question" class="question"></div>
+        <div id="options" class="option-container"></div>
+    </div>
+    <div class="question-numbers">
+        <div class="question-number" onclick="showQuestion(0)" id="question-number-0">1</div>
+        <div class="question-number" onclick="showQuestion(1)" id="question-number-1">2</div>
+        <div class="question-number" onclick="showQuestion(2)" id="question-number-2">3</div>
+        <div class="question-number" onclick="showQuestion(3)" id="question-number-3">4</div>
+        <div class="question-number" onclick="showQuestion(4)" id="question-number-4">5</div>
+        <div class="question-number" onclick="showQuestion(5)" id="question-number-5">6</div>
+        <div class="question-number" onclick="showQuestion(6)" id="question-number-6">7</div>
+        <div class="question-number" onclick="showQuestion(7)" id="question-number-7">8</div>
+        <div class="question-number" onclick="showQuestion(8)" id="question-number-8">9</div>
+        <div class="question-number" onclick="showQuestion(9)" id="question-number-9">10</div>
+    </div>
+    <div id="score-container">0</div>
+    <audio id="correct-sound" src="training-program-correct2-88734.mp3" preload="auto"></audio>
+    <audio id="incorrect-sound" src="negative_beeps-6008.mp3" preload="auto"></audio>
+    <script>
+ const questions = [{ id: 1, question: "En el caso de los riesgos puros, la incertidumbre solo ofrece la posibilidad de:", answer: "pérdida o no pérdida financiera", options: ["Lucro o ganancia financiera", "No es posible determinar las posibilidades en el riesgo puro", "En el riesgo puro no existe la aleatoriedad", "pérdida o no pérdida financiera"] },{ id: 2, question: "Esta posición frente al riesgo involucra tomar medidas que minimicen la pérdida financiera, en caso de materializarse el riesgo:", answer: "Controlar el riesgo", options: ["Transferir el riesgo", "Controlar el riesgo", "Aceptar el riesgo", "Rechazar el riesgo"] },{ id: 3, question: "La compañía de seguros establece las condiciones, a través del condicionado general de una póliza de seguros, el asegurado no participa en la redacción del contrato, podemos decir que es un contrato de:", answer: "Unilateral", options: ["Negociación", "Bilateral ", "Adhesión", "Unilateral"] },{ id: 4, question: "La siguiente situación: Jugar a la Lotería ; caracteriza a un Riesgo", answer: "Especulativo", options: ["Moral", "Especulativo", "Puro", "Todos los anteriores"] },{ id: 5, question: "El señor Carlos solicita un préstamo habitacional en el Banco 'El Ahorro', para garantizar el crédito en caso de fallecimiento del señor Carlos, el banco solicita una póliza de seguro sobre la Vida del señor Carlos, en este caso , en caso de fallecimiento del señor Carlos, la Aseguradora le pagara la suma asegurada a:", answer: "Al Banco el Saldo de la deuda y a los beneficiarios restantes el resto de la suma asegurada", options: ["A los Herederos ", "El 100% de la Suma asegurada al Banco", "Ninguna de las anteriores", "Al Banco el Saldo de la deuda y a los beneficiarios restantes el resto de la suma asegurada"] },{ id: 6, question: "Los siguientes servicios están cubiertos por una póliza de salud:", answer: "Todas las anteriores", options: ["Medicina preventiva, Hospitalización y gastos de farmacia por récipe médico", "Terapia intensiva, cirugía ambulatoria", "Honorarios de médicos y anestesiólogos", "Todas las anteriores"] },{ id: 7, question: "José y Ana están casados y tienen una póliza de seguro de salud, la contrataron el 01/01/2016. José presenta un reclamo por los gastos médicos asociados a una gastritis el 15/02/2016 y Ana presenta un reclamo por una consulta de maternidad el 22/04/2016. En relación a los plazos de esperar, podemos afirmar:", answer: "La aseguradora solo indemniza a José pero a Ana no se le indemniza el reclamo debido a que no ha cumplido con los plazos de espera", options: ["La aseguradora no indemniza, ya que ninguno ha cumplido los plazos de espera estipulados", "La aseguradora solo indemniza a José pero a Ana no se le indemniza el reclamo debido a que no ha cumplido con los plazos de espera", "La aseguradora solo indemniza a José pero a Ana no se le indemniza el reclamo debido a que no ha cumplido con los plazos de espera", "Los plazos de esperar no aplican para maternidad ni gastritis"] },{ id: 8, question: "La cantidad de individuos considerados enfermos o que son víctimas de enfermedad en un espacio y tiempo determinado.", answer: "Tasa de Morbilidad", options: ["Tasa de natalidad", "Tasa Inflación ", "Tasa mortalidad", "Tasa de Morbilidad"] },{ id: 9, question: "Es aquel cargo usual cobrado por la mayoría de los proveedores, por el mismo o similar servicio suministrado dentro de la zona geográfica en la que fue prestado el servicio.", answer: "Gastos acostumbrados y Razonables", options: ["Costo administrativo", "Precio al mayor", "Gastos acostumbrados y Razonables", "Ninguna de las anteriores"] },{ id: 10, question: "Es aquel período dentro de la vigencia de la cobertura de la Póliza, durante el cual El Asegurador no cubre determinados riesgos.", answer: "Periodo de espera", options: ["Periodo de evaluación", "Periodo de espera", "Plazo de cobertura", "Periodo de gracia"]}
+];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        function loadQuestion() {
+            const questionContainer = document.getElementById('question-container');
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const scoreContainer = document.getElementById('score-container');
+            if (currentQuestionIndex < questions.length) {
+                const currentQuestion = questions[currentQuestionIndex];
+                questionElement.textContent = currentQuestion.question;
+                optionsElement.innerHTML = '';
+                currentQuestion.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.classList.add('option');
+                    button.onclick = () => checkAnswer(button, currentQuestion.answer);
+                    optionsElement.appendChild(button);
+                });
+                questionContainer.style.display = 'block';
+            } else {
+                questionContainer.style.display = 'none';
+                alert('¡Has completado el juego!');
+            }
+            scoreContainer.textContent = score;
+        }
+        function checkAnswer(button, correctAnswer) {
+            const options = document.querySelectorAll('.option');
+            const correctSound = document.getElementById('correct-sound');
+            const incorrectSound = document.getElementById('incorrect-sound');
+            const questionNumber = document.getElementById(`question-number-${currentQuestionIndex}`);
+            options.forEach(option => {
+                option.disabled = true;
+            });
+            if (button.textContent === correctAnswer) {
+                button.classList.add('selected', 'correct');
+                correctSound.play();
+                score++;
+                questionNumber.classList.add('correct');
+            } else {
+                button.classList.add('selected', 'incorrect');
+                incorrectSound.play();
+                questionNumber.classList.add('incorrect');
+            }
+            document.getElementById('score-container').textContent = score;
+        }
+        function showQuestion(index) {
+            currentQuestionIndex = index;
+            loadQuestion();
+        }
+        loadQuestion();
+    </script>
+</body>
+</html>
